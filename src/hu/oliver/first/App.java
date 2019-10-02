@@ -1,8 +1,7 @@
 package hu.oliver.first;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -22,12 +21,12 @@ public class App {
     private void run() {
         print("A tömb elemei:", numbers);
         System.out.println("A számok összege: " + summarize());
-        int divisor = 103;
+        int divisor = 3;
         System.out.println("A sorozatban van-e " + divisor + "-val osztható szám?");
         boolean result = condition(divisor);
         System.out.println(result);
         if (result) {
-            System.out.println("A sorozat " + select(divisor) + ". eleme osztható " + divisor + "-val");
+            System.out.println("A sorozat " + indexOf(divisor) + ". eleme osztható " + divisor + "-val");
         }
         divisor = 12;
         System.out.println("A sorozat " + find(divisor) + ". eleme osztható " + divisor + "-val");
@@ -51,61 +50,57 @@ public class App {
 
     private void print(String text, List<Integer> numbers) {
         System.out.println(text);
-        for (int i = 0; i < numbers.size(); i++) {
-            System.out.print(numbers.get(i) + " ");
-        }
-        System.out.println();
+        System.out.println(getNumbers(numbers));
+    }
+
+    private String getNumbers(List<Integer> numbers) {
+        return numbers.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
     }
 
     private int summarize() {
-        int sum = 0;
-        for (int i = 0; i < numbers.size(); i++) {
-            sum = sum + numbers.get(i);
-        }
-        return sum;
+        return numbers.stream()
+                .mapToInt(i -> i)
+                .sum();
     }
 
     private boolean condition(int divisor) {
-        int i = 0;
-        while (i < numbers.size() && numbers.get(i) % divisor > 0) {
-            i = i + 1;
-        }
-        return i < numbers.size();
+        return numbers.stream()
+                .anyMatch(i -> i % divisor == 0);
+    }
+
+    private int indexOf(int divisor) {
+        return numbers.indexOf(select(divisor)) + 1;
     }
 
     private int select(int divisor) {
-        int i = 0;
-        while (numbers.get(i) % divisor > 0) {
-            i = i + 1;
-        }
-        return i + 1;
+        return selectOptional(divisor).get();
+    }
+
+    private Optional<Integer> selectOptional(int divisor) {
+        return numbers.stream()
+                .filter(i -> i % divisor == 0)
+                .findFirst();
     }
 
     private int find(int divisor) {
-        int i = 0;
-        while (i < numbers.size() && numbers.get(i) % divisor > 0) {
-            i = i + 1;
-        }
-        return i < numbers.size() ? i + 1 : -1;
+        return selectOptional(divisor).isPresent() ? indexOf(divisor) : -1;
     }
 
-    private int count(int divisor) {
-        int count = 0;
-        for (int i = 0; i < numbers.size(); i++) {
-            if (numbers.get(i) % divisor == 0) {
-                count = count + 1;
-            }
-        }
-        return count;
+    private long count(int divisor) {
+        return numbers.stream()
+                .filter(i -> i % divisor == 0)
+                .count();
     }
 
     private int max() {
-        int max = 0;
-        for (int i = 1; i < numbers.size(); i++) {
-            if (numbers.get(i) > numbers.get(max)) {
-                max = i;
-            }
-        }
-        return max + 1;
+//        return numbers.stream()
+//                .mapToInt(i -> i)
+//                .max()
+//                .getAsInt();
+        return numbers.stream()
+                .max(Comparator.naturalOrder())
+                .get();
     }
 }
