@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class App {
 
+    public static final int SIZE = 100;
+    public static final int BOUND = 300;
     private final int[] numbers;
 
     private App() {
@@ -37,16 +39,16 @@ public class App {
 
     private int[] initNumbers() {
         Random random = new Random();
-        int[] numbers = new int[100];
-        for (int i = 0; i < 100; i++) {
-            numbers[i] = random.nextInt(100) + 1;
+        int[] numbers = new int[SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            numbers[i] = random.nextInt(BOUND) + 1;
         }
         return numbers;
     }
 
     private void print(String text, int[] numbers) {
         System.out.println(text);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < SIZE; i++) {
             System.out.print(numbers[i] + " ");
         }
         System.out.println();
@@ -54,7 +56,7 @@ public class App {
 
     private int summarize() {
         int sum = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < SIZE; i++) {
             sum = sum + numbers[i];
         }
         return sum;
@@ -62,10 +64,10 @@ public class App {
 
     private boolean condition(int divisor) {
         int i = 0;
-        while (i < 100 && numbers[i] % divisor > 0) {
+        while (i < SIZE && numbers[i] % divisor > 0) {
             i = i + 1;
         }
-        return i < 100;
+        return i < SIZE;
     }
 
     private int select(int divisor) {
@@ -78,15 +80,15 @@ public class App {
 
     private int find(int divisor) {
         int i = 0;
-        while (i < 100 && numbers[i] % divisor > 0) {
+        while (i < SIZE && numbers[i] % divisor > 0) {
             i = i + 1;
         }
-        return i < 100 ? i + 1 : -1;
+        return i < SIZE ? i + 1 : -1;
     }
 
     private int count(int divisor) {
         int count = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < SIZE; i++) {
             if (numbers[i] % divisor == 0) {
                 count = count + 1;
             }
@@ -96,7 +98,7 @@ public class App {
 
     private int max() {
         int max = 0;
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i < SIZE; i++) {
             if (numbers[i] > numbers[max]) {
                 max = i;
             }
@@ -106,8 +108,8 @@ public class App {
 
     private int[] simpleSort() {
         int[] sortedNumbers = numbers.clone();
-        for (int i = 0; i < 99; i++) {
-            for (int j = i + 1; j < 100; j++) {
+        for (int i = 0; i < SIZE - 1; i++) {
+            for (int j = i + 1; j < SIZE; j++) {
                 if (sortedNumbers[i] > sortedNumbers[j]) {
                     int puffer = sortedNumbers[i];
                     sortedNumbers[i] = sortedNumbers[j];
@@ -120,7 +122,7 @@ public class App {
 
     private int[] bubbleSort() {
         int[] sortedNumbers = numbers.clone();
-        for (int i = 100; i > 0; i--) {
+        for (int i = SIZE; i > 0; i--) {
             for (int j = 0; j < i - 1; j++) {
                 if (sortedNumbers[j] > sortedNumbers[j + 1]) {
                     int puffer = sortedNumbers[j];
@@ -131,6 +133,4 @@ public class App {
         }
         return sortedNumbers;
     }
-
-
 }
