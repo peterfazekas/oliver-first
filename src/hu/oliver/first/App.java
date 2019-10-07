@@ -2,6 +2,7 @@ package hu.oliver.first;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class App {
 
@@ -33,19 +34,15 @@ public class App {
         divisor = 3;
         System.out.println("A sorozatban " + count(divisor) + " db " + divisor + "-al osztahtó szám van!");
         System.out.println("A sorozatban a " + max() + ". elem a legnagyobb értékű!");
-//        print("A rendezetlen tömb elemei:", numbers);
-//        print("A rendezett tömb elemei:", simpleSort());
-//        print("A rendezetlen tömb elemei:", numbers);
-//        print("A rendezett tömb elemei:", bubbleSort());
+        print("A rendezetlen tömb elemei:", numbers);
+        print("A rendezett tömb elemei:", sort());
     }
 
     private List<Integer> initNumbers() {
         Random random = new Random();
-        List<Integer> numbers = new ArrayList<>();
-        for (int i = 0; i < SIZE; i++) {
-            numbers.add(random.nextInt(BOUND) + 1);
-        }
-        return numbers;
+        return IntStream.range(0, SIZE)
+                .mapToObj(i -> random.nextInt(BOUND) + 1)
+                .collect(Collectors.toList());
     }
 
     private void print(String text, List<Integer> numbers) {
@@ -95,12 +92,14 @@ public class App {
     }
 
     private int max() {
-//        return numbers.stream()
-//                .mapToInt(i -> i)
-//                .max()
-//                .getAsInt();
         return numbers.stream()
                 .max(Comparator.naturalOrder())
                 .get();
+    }
+
+    private List<Integer> sort() {
+        return numbers.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 }
